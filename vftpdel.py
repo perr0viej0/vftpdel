@@ -25,6 +25,8 @@ def borraftp(server, port, user, passwd, path):
 
 if len(sys.argv) < 6:
     print("ERROR: Faltan parametros")
+    print("USO: vftpdel servidor puerto usuario password directorio")
+    print("Ej.: vftpdel servidor.ftp 21 usuario password /ruta/a/borrar")
     sys.exit()
 else:
     borraftp(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])
