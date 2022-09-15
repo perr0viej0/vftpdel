@@ -19,7 +19,10 @@ def borraftp(server, port, user, passwd, path):
     print("LISTA DE ARCHIVOS A ELIMINAR\n")
     print(ftp.retrlines('LIST'))
     for cosas in ftp.nlst():
-        ftp.delete(cosas)
+        try:
+            ftp.delete(cosas)
+        except Exception:
+            ftp.rmd(cosas)
     print("\nCONTENIDO DEL DIRECTORIO DESPUES DE ELIMINAR\n")
     print(ftp.retrlines('LIST'))
     sys.stdout.close()
