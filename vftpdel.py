@@ -22,6 +22,10 @@ def borraftp(server, port, user, passwd, path):
         try:
             ftp.delete(cosas)
         except Exception:
+            ftp.cwd(cosas)
+            for x in ftp.nlst():
+                ftp.delete(x)
+            ftp.sendcmd('CDUP')
             ftp.rmd(cosas)
     print("\nCONTENIDO DEL DIRECTORIO DESPUES DE ELIMINAR\n")
     print(ftp.retrlines('LIST'))
