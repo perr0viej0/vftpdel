@@ -26,7 +26,6 @@ def borraftp(server, port, user, passwd, path):
             for x in ftp.nlst():
                 ftp.delete(x)
             ftp.sendcmd('CDUP')
-            ftp.rmd(cosas)
     print("\nCONTENIDO DEL DIRECTORIO DESPUES DE ELIMINAR\n")
     print(ftp.retrlines('LIST'))
     sys.stdout.close()
@@ -40,6 +39,5 @@ if len(sys.argv) < 6:
     print("Ej.: vftpdel servidor.ftp 21 usuario password /ruta/a/borrar")
     sys.exit()
 else:
-
     borraftp(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])
     sys.exit()
