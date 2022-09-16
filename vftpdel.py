@@ -12,8 +12,8 @@ def borraftp(server, port, user, passwd, path):
     sys.stdout = open('vftpdel.log', 'w')   # sacamos stdout a fichero
     ftp = FTP_TLS()
     ftp.ssl_version = ssl.PROTOCOL_TLSv1_2  # obj ftp_tls y ssl
-    if DEBUG == True:
-        ftp.debugging = 1
+    if DEBUG:
+        ftp.debugging = 2
     ftp.connect(server, port)
     ftp.login(user, passwd)
     ftp.prot_p()            # encriptamos conexion
@@ -30,9 +30,8 @@ def borraftp(server, port, user, passwd, path):
             pass                    # excepto si es dir
     print("\nCONTENIDO DEL DIRECTORIO DESPUES DE ELIMINAR\n")
     print(ftp.retrlines('LIST'))
-    sys.stdout.close()
     ftp.quit()
-
+    sys.stdout.close()      # lo ultimo es cerrar stdout, pq si no dara error al intentar escribir en un fichero cerrado
 # FIN FUNCIONES
 
 if len(sys.argv) < 6:
