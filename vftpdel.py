@@ -18,6 +18,7 @@ def borraftp(server, port, user, passwd, path):
     ftp.login(user, passwd)
     ftp.prot_p()            # encriptamos conexion
     ftp.cwd(path)           # subimos a path
+    print(ftp.getwelcome(),"\n")
     print("DIRECTORIO DE TRABAJO:\n")
     print(ftp.pwd(),"\n")
     print("LISTA DE ARCHIVOS A ELIMINAR\n")
