@@ -10,6 +10,7 @@ es necesario parchear la libreria ftplib.py (/usr/local/lib/python3.8/ftplib.py)
 
 -> EN LINEA 790:
 - conn = self.context.wrap_socket(conn, server_hostname=self.host)
+
 Cambiarla por:
 - conn = self.context.wrap_socket(conn, server_hostname=self.host, session=self.sock.session)
 ------------------------------------------------
@@ -27,5 +28,8 @@ Los resultados de la operacion se guardan en vftpdel.log
 
 --------------------------------------------------
 Requerimientos:
+-
+- ftplib parcheada
 - ftputil 
+
 Instalacion: pip3 install ftputil

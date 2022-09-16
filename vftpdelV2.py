@@ -10,6 +10,7 @@ from ftplib import FTP_TLS
 import ftputil
 import ftputil.session
 import sys
+import ssl
 
 
 # FUNCIONES
@@ -22,6 +23,7 @@ my_session_factory = ftputil.session.session_factory(
 
 def borraftprec(server, user, passwd, path):
     sys.stdout = open('vftpdel.log', 'w')
+    print(getwelcome(), "\n")
     ftp = ftputil.FTPHost(server, user, passwd, session_factory=my_session_factory)
     ftp.chdir(path)
     print("DIRECTORIO DE TRABAJO:\n")
@@ -32,17 +34,21 @@ def borraftprec(server, user, passwd, path):
             print(ftp.path.join(root,x))
             ftp.remove(ftp.path.join(root, x))
     print("\nCONTENIDO DEL ARBOL TRAS EL BORRADO:\n")
-    print(ftp.getcwd(),"->\n",ftp.listdir(ftp.getcwd()))
+    print(ftp.getcwd(),"->")
+    for x in ftp.listdir(ftp.getcwd()):
+        print(x)
     for root, dirs, files in ftp.walk(ftp.getcwd()):
         for x in dirs:
             print(ftp.path.join(root,x),"->")
-            print(ftp.listdir(ftp.path.join(root, x)))
+            for y in ftp.listdir(ftp.path.join(root, x)):
+                print(y)
     print()
     ftp.close()
     sys.stdout.close()
 
 def borraftptotal(server, user, passwd, path):
     sys.stdout = open('vftpdel.log', 'w')
+    print(getwelcome(), "\n")
     ftp = ftputil.FTPHost(server, user, passwd, session_factory=my_session_factory)
     ftp.chdir(path)
     print("DIRECTORIO DE TRABAJO:\n")
@@ -56,17 +62,21 @@ def borraftptotal(server, user, passwd, path):
             print(ftp.path.join(root,x))
             ftp.rmdir(ftp.path.join(root,x))
     print("\nCONTENIDO DEL ARBOL TRAS EL BORRADO:\n")
-    print(ftp.getcwd(), "->\n", ftp.listdir(ftp.getcwd()))
-    for root, dirs, files in ftp.walk(ftp.getcwd()):
+    print(ftp.getcwd(), "->")
+    for x in ftp.listdir(ftp.getcwd()):
+        print(x)
+    for root, dirs, files in ftp.walk(ftp.getcwd()):    # aseguramos q esta bien borrado
         for x in dirs:
             print(ftp.path.join(root, x), "->")
-            print(ftp.listdir(ftp.path.join(root, x)))
+            for y in ftp.listdir(ftp.path.join(root, x)):
+                print(y)
     print()
     ftp.close()
     sys.stdout.close()
 
 def borraftp(server, user, passwd, path):
     sys.stdout = open('vftpdel.log', 'w')
+    print(getwelcome(),"\n")
     ftp = ftputil.FTPHost(server, user, passwd, session_factory=my_session_factory)
     ftp.chdir(path)
     print("DIRECTORIO DE TRABAJO:\n")
@@ -80,11 +90,20 @@ def borraftp(server, user, passwd, path):
         except ftputil.error.PermanentError:
             pass
     print("CONTENIDO DEL DIRECTORIO TRAS EL BORRADO:")
-    print(ftp.listdir(ftp.getcwd()),"\n")
+    for x in ftp.listdir(ftp.getcwd()):
+        print(x)
     ftp.close()
     sys.stdout.close()
 
-
+def getwelcome():
+    ftp = FTP_TLS()     # conectamos por ftplib para obtener el welcome y guardarlo en el log
+    ftp.ssl_version = ssl.PROTOCOL_TLSv1_2  # obj ftp_tls y ssl
+    ftp.connect(sys.argv[1], int(sys.argv[2]))
+    ftp.login(sys.argv[3], sys.argv[4])
+    ftp.prot_p()
+    x = ftp.getwelcome()
+    ftp.quit()
+    return x
 # FIN FUNCIONES
 opciones=["-r", "-s","-t"]
 
