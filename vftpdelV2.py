@@ -14,22 +14,22 @@ import ssl
 
 
 # FUNCIONES
-my_session_factory = ftputil.session.session_factory(
-                       base_class=FTP_TLS,
+my_session_factory = ftputil.session.session_factory(       # definimos nuestra session_factory para poder pasar
+                       base_class=FTP_TLS,                  # argumentos a nuestra conexion ftps
                        port=int(sys.argv[2]),
-                       encrypt_data_channel=True,
+                       encrypt_data_channel=True,           # equivalente a prop_p en ftplib
                        encoding="UTF-8",
                        debug_level=0)
 
 def borraftprec(server, user, passwd, path):
-    sys.stdout = open('vftpdel.log', 'w')
-    print(getwelcome(), "\n")
+    sys.stdout = open('vftpdel.log', 'w')                   # pasamos stdout a un fichero
+    print(getwelcome(), "\n")                               # obtenemos el welcome del server
     ftp = ftputil.FTPHost(server, user, passwd, session_factory=my_session_factory)
-    ftp.chdir(path)
+    ftp.chdir(path)                             # Creamos conexion y nos movemos a path remoto
     print("DIRECTORIO DE TRABAJO:\n")
     print(ftp.getcwd(), "\n")
     print("CONTENIDO DEL ARBOL:\n")
-    for root,dirs, files in ftp.walk(ftp.getcwd()):
+    for root,dirs, files in ftp.walk(ftp.getcwd()):     # caminamos por el arbol
         for x in files:
             print(ftp.path.join(root,x))
             ftp.remove(ftp.path.join(root, x))
@@ -54,11 +54,11 @@ def borraftptotal(server, user, passwd, path):
     print("DIRECTORIO DE TRABAJO:\n")
     print(ftp.getcwd(), "\n")
     print("CONTENIDO DEL ARBOL:\n")
-    for root,dirs, files in ftp.walk(ftp.getcwd(), topdown=False):
-        for x in files:
-            print(ftp.path.join(root,x))
+    for root,dirs, files in ftp.walk(ftp.getcwd(), topdown=False):  # caminamos por el arbol al reves, de lo mas
+        for x in files:                                             # profundo hacia los superiores
+            print(ftp.path.join(root,x))                            # eliminamos ficheros
             ftp.remove(ftp.path.join(root, x))
-        for x in dirs:
+        for x in dirs:                                              # eliminados los ficheros, eliminamos directorio
             print(ftp.path.join(root,x))
             ftp.rmdir(ftp.path.join(root,x))
     print("\nCONTENIDO DEL ARBOL TRAS EL BORRADO:\n")
@@ -87,7 +87,7 @@ def borraftp(server, user, passwd, path):
             str(files)
             print(files)
             ftp.remove(files)
-        except ftputil.error.PermanentError:
+        except ftputil.error.PermanentError:        # si es una carpeta, ignora
             pass
     print("CONTENIDO DEL DIRECTORIO TRAS EL BORRADO:")
     for x in ftp.listdir(ftp.getcwd()):
@@ -100,14 +100,14 @@ def getwelcome():
     ftp.ssl_version = ssl.PROTOCOL_TLSv1_2  # obj ftp_tls y ssl
     ftp.connect(sys.argv[1], int(sys.argv[2]))
     ftp.login(sys.argv[3], sys.argv[4])
-    ftp.prot_p()
+    ftp.prot_p()                # encriptamos conexion
     x = ftp.getwelcome()
     ftp.quit()
-    return x
+    return x            # devolvemos el welcome
 # FIN FUNCIONES
 opciones=["-r", "-s","-t"]
 
-if len(sys.argv) < 7:
+if len(sys.argv) < 7:           # si no estan todos los parametros, help ayudame!
     print("ERROR: Faltan parametros")
     print("USO: vftpdel servidor puerto usuario password directorio opcion")
     print("Ej.: vftpdel servidor.ftp 21 usuario password /ruta/a/borrar -r")
@@ -117,7 +117,7 @@ if len(sys.argv) < 7:
     print("-t: total, borra todos los archivos y subdirectorios de la ruta")
     print("\nLos resultados de la operacion se guardan en vftpdel.log")
     sys.exit()
-elif sys.argv[6] not in opciones:
+elif sys.argv[6] not in opciones:   # si el comando esta mal te los recuerdo
     print("ERROR: opcion no reconocida.\nOpciones validas: -r, -s, -t")
     sys.exit()
 elif sys.argv[6] == "-r":
