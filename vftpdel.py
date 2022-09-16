@@ -13,11 +13,13 @@ def borraftp(server, port, user, passwd, path):
     ftp = FTP_TLS()
     ftp.ssl_version = ssl.PROTOCOL_TLSv1_2  # obj ftp_tls y ssl
     if DEBUG == True:
-        ftp.debugging = 2
+        ftp.debugging = 1
     ftp.connect(server, port)
     ftp.login(user, passwd)
     ftp.prot_p()            # encriptamos conexion
     ftp.cwd(path)           # subimos a path
+    print("DIRECTORIO DE TRABAJO:\n")
+    print(ftp.pwd(),"\n")
     print("LISTA DE ARCHIVOS A ELIMINAR\n")
     print(ftp.retrlines('LIST'))        # listamos
 
