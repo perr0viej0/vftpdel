@@ -9,24 +9,23 @@ DEBUG = False
 # FUNCIONES
 
 def borraftp(server, port, user, passwd, path):
-    sys.stdout = open('vftpdel.log', 'w')
+    sys.stdout = open('vftpdel.log', 'w')   # sacamos stdout a fichero
     ftp = FTP_TLS()
-    ftp.ssl_version = ssl.PROTOCOL_TLSv1_2
+    ftp.ssl_version = ssl.PROTOCOL_TLSv1_2  # obj ftp_tls y ssl
     if DEBUG == True:
         ftp.debugging = 2
     ftp.connect(server, port)
     ftp.login(user, passwd)
-    ftp.prot_p()
-    ftp.cwd(path)
+    ftp.prot_p()            # encriptamos conexion
+    ftp.cwd(path)           # subimos a path
     print("LISTA DE ARCHIVOS A ELIMINAR\n")
-    print(ftp.retrlines('LIST'))
-    """condicional comprobar ficheros no directorios"""
+    print(ftp.retrlines('LIST'))        # listamos
 
     for cosas in ftp.nlst():
         try:
-            ftp.delete(cosas)
+            ftp.delete(cosas)       # eliminalo
         except Exception:
-            pass
+            pass                    # excepto si es dir
     print("\nCONTENIDO DEL DIRECTORIO DESPUES DE ELIMINAR\n")
     print(ftp.retrlines('LIST'))
     sys.stdout.close()
