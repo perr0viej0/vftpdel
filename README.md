@@ -20,7 +20,7 @@ Borra archivos y/o directorios de un servidor FTPS
 
 - Uso: vftpdelV2 servidor puerto usuario contraseña directorio opcion
 - Opciones: 
-- - -r: recursivo, borra todos los archivos de la ruta, ignorando subdirectorios
+- - -r: recursivo, borra todos los archivos de la ruta, incluyendo archivos en subdirectorios
 - - -s: simple, borra todos los archivos de la ruta, ignorando subdirectorios
 - - -t: total, borra todos los archivos y subdirectorios de la ruta
 
