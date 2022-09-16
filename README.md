@@ -5,6 +5,8 @@ Borra todos los archivos en un directorio de un servidor FTPS
 - Uso: vfptdel servidor puerto usuario contraseña directorio
 
 -----------------------------------------------
+Requerimientos:
+-
 Si el servidor FTPS requiere que la sesion TLS se reutilice en cada "data connection" (como filezilla server), 
 es necesario parchear la libreria ftplib.py (/usr/local/lib/python3.8/ftplib.py)
 
